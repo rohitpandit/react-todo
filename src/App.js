@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import TodoItem from './components/TodoItem';
 import {
 	Button,
@@ -148,9 +148,9 @@ const App = () => {
 												/>
 											);
 										}
-										return;
+										return <Fragment key={todo.id}></Fragment>;
 								  })
-								: todoList.map((todo) => {
+								: todoList.map(function (todo) {
 										if (todo.done === false) {
 											return (
 												<TodoItem
@@ -161,7 +161,7 @@ const App = () => {
 												/>
 											);
 										}
-										return;
+										return <Fragment key={todo.id}></Fragment>;
 								  })}
 						</ListGroup>
 					)}
