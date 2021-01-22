@@ -15,10 +15,10 @@ const App = () => {
 	const [input, setInput] = useState('');
 	const [errorMessage, setErrorMessage] = useState(''); //for showing error and success
 	const [successMessage, setSuccessMessage] = useState('');
+	const [filter, setFilter] = useState('all');
 
-	//FilerHandler
-	const filterHandler = () => {
-		console.log('in the filter handler');
+	const filterHandler = (e) => {
+		setFilter(e.target.value);
 	};
 
 	//Mark as Done
@@ -31,7 +31,7 @@ const App = () => {
 		});
 
 		setTodoList(newList);
-		setSuccessMessage('Mark as Done successfully');
+		setSuccessMessage('Marked as Done');
 		setTimeout(() => setSuccessMessage(''), 3000);
 		return;
 	};
@@ -110,11 +110,12 @@ const App = () => {
 				</Col>
 				<Col md={7}>
 					<Row>
-						<Form.Group onChange={filterHandler}>
-							<Form.Control as='select'>
-								<option selected value='all'>
-									All Tasks
-								</option>
+						<Form.Group>
+							<Form.Control
+								onChange={filterHandler}
+								defaultValue='all'
+								as='select'>
+								<option value='all'>All Tasks</option>
 								<option value='done'>Completed Tasks</option>
 								<option value='not-done'>Uncomplete Tasks</option>
 							</Form.Control>
@@ -124,14 +125,44 @@ const App = () => {
 						<p>No task added</p>
 					) : (
 						<ListGroup variant='flush'>
-							{todoList.map((todo) => (
-								<TodoItem
-									todo={todo}
-									key={todo.id}
-									deleteTodo={deleteTodo}
-									markDone={markDone}
-								/>
-							))}
+							{filter === 'all'
+								? todoList.map((todo) => {
+										return (
+											<TodoItem
+												todo={todo}
+												key={todo.id}
+												deleteTodo={deleteTodo}
+												markDone={markDone}
+											/>
+										);
+								  })
+								: filter === 'done'
+								? todoList.map((todo) => {
+										if (todo.done === true) {
+											return (
+												<TodoItem
+													todo={todo}
+													key={todo.id}
+													deleteTodo={deleteTodo}
+													markDone={markDone}
+												/>
+											);
+										}
+										return;
+								  })
+								: todoList.map((todo) => {
+										if (todo.done === false) {
+											return (
+												<TodoItem
+													todo={todo}
+													key={todo.id}
+													deleteTodo={deleteTodo}
+													markDone={markDone}
+												/>
+											);
+										}
+										return;
+								  })}
 						</ListGroup>
 					)}
 				</Col>
